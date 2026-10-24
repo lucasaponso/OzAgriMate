@@ -43,6 +43,17 @@ python -m pytest -q                                     # 56 tests
 
 One service on its own: `uvicorn services.telemetry_service.main:app --port 8002`
 
+### Docker (one container per service)
+
+```bash
+docker compose up --build        # starts the 3 containers on ports 8001-8003, same URLs as above
+docker compose down
+```
+
+Each container runs its own FastAPI app from one shared `Dockerfile` (`SERVICE` build arg). Only `services/shared` and
+that service's own folder are copied into its image. Docker is optional: `python main.py` runs the same three services
+without it.
+
 ### Postman
 
 Import `postman/OzAgriMate.postman_collection.json`. It has 20 requests: each API's documented success case,
@@ -57,6 +68,7 @@ Top-level folders follow the deployment view. Inside each implemented service, t
 ```
 ozagrimate-platform/
 ├── main.py                                     platform entry point: starts every service container
+├── Dockerfile, docker-compose.yml              one container per service (optional)
 ├── services/                                   Kubernetes cluster: application containers
 │   ├── farm_management_service/                ✅ APIs 1-4   (owns Farm DB)
 │   ├── telemetry_service/                      ✅ APIs 5-6   (owns Telemetry DB)

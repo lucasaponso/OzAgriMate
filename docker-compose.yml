@@ -1,0 +1,21 @@
+# One container per service, each running its own FastAPI app (matches the Container diagram).
+# Start:  docker compose up --build        Stop:  docker compose down
+# Service names match platform_infrastructure/api_gateway/nginx.conf.
+services:
+  farm-management-service:
+    build:
+      context: .
+      args: {SERVICE: farm_management_service, PORT: "8001"}
+    ports: ["8001:8001"]    # APIs 1-4, http://localhost:8001/docs
+
+  telemetry-service:
+    build:
+      context: .
+      args: {SERVICE: telemetry_service, PORT: "8002"}
+    ports: ["8002:8002"]    # APIs 5-6, http://localhost:8002/docs
+
+  irrigation-control-service:
+    build:
+      context: .
+      args: {SERVICE: irrigation_control_service, PORT: "8003"}
+    ports: ["8003:8003"]    # APIs 7-8, http://localhost:8003/docs
