@@ -1,0 +1,819 @@
+{
+  "info": {
+    "name": "OzAgriMate Platform - 8 REST APIs",
+    "description": "Run in order against freshly started services (python main.py). Data is in memory, so restart the services before re-running the whole collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Farm service (port 8001)",
+      "item": [
+        {
+          "name": "API 2 - POST /farms - 201 Created",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Green Valley\",\n  \"region\": \"VIC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"id\": \"farm-101\", \"name\": \"Green Valley\", \"region\": \"VIC\"}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 2 - POST /farms - 400 invalid region",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Green Valley\",\n  \"region\": \"Victoria\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 1 - GET /farms/{id} - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-101",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-101"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"id\": \"farm-101\", \"name\": \"Green Valley\", \"region\": \"VIC\"}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 1 - GET /farms/{id} - 404 Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-999",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 3 - PUT /farms/{id} - 200 OK",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-101",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-101"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Green Valley North\",\n  \"region\": \"VIC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"id\": \"farm-101\", \"name\": \"Green Valley North\", \"region\": \"VIC\"}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 3 - PUT /farms/{id} - 400 missing region",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-101",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-101"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Green Valley North\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 3 - PUT /farms/{id} - 404 Not Found",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-999",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-999"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Green Valley North\",\n  \"region\": \"VIC\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 4 - DELETE /farms/{id} - 204 No Content",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-101",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-101"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 4 - DELETE /farms/{id} - 404 Not Found",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{farmUrl}}/api/v1/farms/farm-101",
+              "host": [
+                "{{farmUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "farms",
+                "farm-101"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Telemetry service (port 8002)",
+      "item": [
+        {
+          "name": "API 6 - GET latest - 404 before any readings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{telemetryUrl}}/api/v1/telemetry/farms/farm-101/latest",
+              "host": [
+                "{{telemetryUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "telemetry",
+                "farms",
+                "farm-101",
+                "latest"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 5 - POST /telemetry/readings - 201 Created",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{telemetryUrl}}/api/v1/telemetry/readings",
+              "host": [
+                "{{telemetryUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "telemetry",
+                "readings"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"readingId\": \"r-17\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"dev-8\",\n  \"metric\": \"soilMoisture\",\n  \"value\": 18.5,\n  \"unit\": \"percent\",\n  \"timestamp\": \"2026-10-18T02:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"readingId\": \"r-17\", \"status\": \"accepted\"}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 5 - POST /telemetry/readings - 409 duplicate readingId",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{telemetryUrl}}/api/v1/telemetry/readings",
+              "host": [
+                "{{telemetryUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "telemetry",
+                "readings"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"readingId\": \"r-17\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"dev-8\",\n  \"metric\": \"soilMoisture\",\n  \"value\": 18.5,\n  \"unit\": \"percent\",\n  \"timestamp\": \"2026-10-18T02:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 5 - POST /telemetry/readings - 400 value out of range",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{telemetryUrl}}/api/v1/telemetry/readings",
+              "host": [
+                "{{telemetryUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "telemetry",
+                "readings"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"readingId\": \"r-19\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"dev-8\",\n  \"metric\": \"soilMoisture\",\n  \"value\": 140,\n  \"unit\": \"percent\",\n  \"timestamp\": \"2026-10-18T02:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 6 - GET latest - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{telemetryUrl}}/api/v1/telemetry/farms/farm-101/latest",
+              "host": [
+                "{{telemetryUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "telemetry",
+                "farms",
+                "farm-101",
+                "latest"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"farmId\": \"farm-101\", \"readings\": [{\"readingId\": \"r-17\", \"metric\": \"soilMoisture\", \"value\": 18.5, \"unit\": \"percent\"}]}));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Irrigation service (port 8003)",
+      "item": [
+        {
+          "name": "API 7 - POST /irrigation/commands - 202 Accepted",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{irrigationUrl}}/api/v1/irrigation/commands",
+              "host": [
+                "{{irrigationUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "irrigation",
+                "commands"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"commandId\": \"cmd-7\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"pump-2\",\n  \"action\": \"START\",\n  \"durationSeconds\": 120\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 202', () => pm.response.to.have.status(202));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"commandId\": \"cmd-7\", \"status\": \"accepted\"}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 7 - POST /irrigation/commands - 202 idempotent retry (same command)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{irrigationUrl}}/api/v1/irrigation/commands",
+              "host": [
+                "{{irrigationUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "irrigation",
+                "commands"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"commandId\": \"cmd-7\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"pump-2\",\n  \"action\": \"START\",\n  \"durationSeconds\": 120\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 202', () => pm.response.to.have.status(202));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"commandId\": \"cmd-7\", \"status\": \"accepted\"}));",
+                  "pm.test('Marked as replay', () => pm.expect(pm.response.headers.get('Idempotent-Replayed')).to.eql('true'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 7 - POST /irrigation/commands - 409 commandId reused",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{irrigationUrl}}/api/v1/irrigation/commands",
+              "host": [
+                "{{irrigationUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "irrigation",
+                "commands"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"commandId\": \"cmd-7\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"pump-2\",\n  \"action\": \"START\",\n  \"durationSeconds\": 600\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 7 - POST /irrigation/commands - 400 invalid action",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{irrigationUrl}}/api/v1/irrigation/commands",
+              "host": [
+                "{{irrigationUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "irrigation",
+                "commands"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"commandId\": \"cmd-9\",\n  \"farmId\": \"farm-101\",\n  \"deviceId\": \"pump-2\",\n  \"action\": \"OPEN\",\n  \"durationSeconds\": 120\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 8 - GET /irrigation/commands/{commandId} - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{irrigationUrl}}/api/v1/irrigation/commands/cmd-7",
+              "host": [
+                "{{irrigationUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "irrigation",
+                "commands",
+                "cmd-7"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body matches API design sample', () => pm.expect(pm.response.json()).to.eql({\"commandId\": \"cmd-7\", \"farmId\": \"farm-101\", \"status\": \"accepted\"}));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "API 8 - GET /irrigation/commands/{commandId} - 404 Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{irrigationUrl}}/api/v1/irrigation/commands/cmd-404",
+              "host": [
+                "{{irrigationUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "irrigation",
+                "commands",
+                "cmd-404"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "farmUrl",
+      "value": "http://localhost:8001"
+    },
+    {
+      "key": "telemetryUrl",
+      "value": "http://localhost:8002"
+    },
+    {
+      "key": "irrigationUrl",
+      "value": "http://localhost:8003"
+    }
+  ]
+}
